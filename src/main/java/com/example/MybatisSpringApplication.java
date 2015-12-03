@@ -1,6 +1,6 @@
 package com.example;
+import com.example.config.HikariCPConfig;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 /**
  * Created by jianzhongli on 15/11/21.
@@ -20,11 +21,13 @@ import javax.annotation.Resource;
 @MapperScan("com.example.mapper")
 public class MybatisSpringApplication {
 
+    @Resource
+    private HikariCPConfig hikariCPConfig;
+
     //DataSource配置
     @Bean
-    @ConfigurationProperties(prefix="spring.datasource")
     public DataSource dataSource() {
-        return new org.apache.tomcat.jdbc.pool.DataSource();
+        return hikariCPConfig.dataSource();
     }
 
     //提供SqlSeesion
